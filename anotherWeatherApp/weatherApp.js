@@ -8,7 +8,7 @@ const descElement = document.querySelector(".temperature-description p");
 const locationElement = document.querySelector(".location p");
 const notificationElement = document.querySelector(".notification");
 
-// The APP DATA
+// The APP DATA; The WEATHER OBJECT
 const weather = {};
 
 weather.tempature = {
@@ -16,35 +16,38 @@ weather.tempature = {
 }
 
 // APP CONSTS AND VARS
-const KELVIN = 273; // SUBTRACT 300 FOR C
+const KELVIN = 273; // SUBTRACT 300 FOR Celsius
 // API KEY
-const key = "82005d27a116c2880c8f0fcb866998a0";
+const key = "a5687a8c05e85cd1c9b04a1631190177";
 
 // VERIFY THE USER'S BROWSER PROVIDES GEOLOCATION
+if('geolocation' in navigator){ // if it works, regardless if error is present, the geolocation still works
+  navigator.geolocation.getCurrentPosition(setPosition, showError); 
+} else {  
+    notificationElement.style.display = "block";
+    notificationElement.innerHTML = "<p>This browser's settings prevents the support of geolocation";
+}
 
+// Next, define setPosition and error...
 
+// Get User's Position (creating setPosition function that's already called)
+function setPosition(position){
+  let latitude = position.coords.latitude;
+  let longitude = position.coords.latitude;
 
-// THE PROCESS AND LOGIC:
-iconElement.innerHTML = `<image src = "icons/${weather.iconId}.png"/>`;
-tempElement.innerHTML = `${weather.teampature.value}º <span>C</span>`;
-descElement.innerHTML = weather.description;
-locationElement.innerHTML = `${weather.city}, ${weather.state}`;
+  getWeather(latitude, longitude);
+}
 
-tempElement.addEventListener("click", function () {
-  if(weather.tempature.unit === undefined) return;  // No data, no go
-  if(weather.tempature.unit === "celsius") {
-    let fahrenheit = celsiusToFahrenheit(weather.tempature.value);
-    fahrenheit = Math.floor(fahrenheit); 
-    tempElement.innerHTML = `${fahrenheit}º <span>F</span>`
-    weather.tempature.unit = "fahrenheit";
-  }else{
-    tempElement.innerHTML = `${weather.tempature.value}º <span>C</span>`;
-    weather.tempature.unit = "celsius";
-  }
-});
+// To show error if there is no geolocation service
+function showError(error){
+  notificationElement.style.display = "block";  
+  console.log(error);
+  console.log(error.message);  // User denied Geolocation
+  notificationElement.innerHTML = `<p>Looks like the ${error.message}</p>`
+}
 
-weather.tempature.value = 300 - 273
-
-function celsiusToFahrenheit(tempature) {
-  return (tempature * 9/5) + 32;
+// the Goody Goods, GETTING WEATHER WITH THE API
+function getWeather (latitude, longitude) {
+  let api = `http://www.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&id=${key}`;
+  console.log(api);
 }

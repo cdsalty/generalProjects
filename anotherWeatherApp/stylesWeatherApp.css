@@ -41,14 +41,14 @@ body{
 }
 
 .weather-container{
-  /* margin: 10px auto; */
+  margin: 10px auto;  /*Had to add this info*/
   width: 300px;
   height: 260px;
   background-color: #F4F9FF;
 }
 
 .weather-icon{
-  /* margin: 0 auto; */
+  margin: 0 auto;   /*Had to add this info*/
   width: 300px;
   height: 128px;
 }
@@ -61,6 +61,8 @@ body{
 .temperature-value{
   width: 300px;
   height:60px;
+  /* display: block; */
+  margin: 0 auto;
 }
 
 .temperature-value p{
